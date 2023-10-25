@@ -1,0 +1,3 @@
+/home/bigfly/Documents/picture_mnist/build/CMakeFiles/rebuild_cache.dir
+/home/bigfly/Documents/picture_mnist/build/CMakeFiles/edit_cache.dir
+/home/bigfly/Documents/picture_mnist/build/CMakeFiles/mnist.dir
