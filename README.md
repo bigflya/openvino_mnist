@@ -3,6 +3,23 @@
 ## 仓库介绍 ：
 openvino_mnist是一个关于openvino的一个推理项目，这里给出两套代码分别是推理视频的，和推理图片的。推理过程均在Ubuntu20.04环境下，通过cmake编译构建项目，且采用最新的openvino LTS版本（截至2023/10/26）。供大家学习使用。这里也给出Ubuntu20安装openvino的教程[如何在Ubuntu上安装openvino runtime运行环境](https://bigflya.top/2023/06/03/openvino%20%E5%9C%A8ubuntu20%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/)
 
+
+
+## 快速使用教程
+
+克隆此仓库到本地，建议先看[如何在Ubuntu上安装openvino runtime运行环境](https://bigflya.top/2023/06/03/openvino%20%E5%9C%A8ubuntu20%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/)，按照步骤完成相关环境的搭建。
+图片检测
+
+
+
+
+
+
+
+
+
+
+
 ## 模型的数据集下载
 
 链接：https://pan.baidu.com/s/15k1x9COE3zdV-b7wLWKOWg 
