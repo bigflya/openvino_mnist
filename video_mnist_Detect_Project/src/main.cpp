@@ -9,26 +9,25 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
-
-int main()//int argc, char** argv
+int main() // int argc, char** argv
 {
 
-
-    //YOLOVINO yolov5vino;// init
-    String proj_dir ="/home/bigfly/Documents/openvino_mnist/video_mnist_Detect_Project/";
-
-
-        String video_file = proj_dir+"/test_data/mnist.mp4";
-    String save_data_path = proj_dir+"/save_data/";
-    string csv_name = save_data_path+"/result.csv";
-    String modelFilename = proj_dir+"/configFiles/best1.onnx";
-    String classfile = proj_dir+"/configFiles/classes.txt";
-    YOLOVINO yolov5vino(classfile,modelFilename);// init
     
-    
-    
+    String proj_dir = "/home/bigfly/Documents/openvino_mnist/video_mnist_Detect_Project/";
+
+    String video_file = proj_dir + "/test_data/mnist.mp4";
+    String save_data_path = proj_dir + "/save_data/";
+    string csv_name = save_data_path + "/result.csv";
+    String modelFilename = proj_dir + "/configFiles/best1.onnx";
+    String classfile = proj_dir + "/configFiles/classes.txt";
+    YOLOVINO yolov5vino(classfile, modelFilename); // init
+
     std::exception_ptr exception_var;
-	yolov5vino.request.set_callback([&](std::exception_ptr ex) {
+
+
+    //set_callback begin
+    yolov5vino.request.set_callback([&](std::exception_ptr ex)
+                                    {
 		if (ex) {
 			exception_var = ex;
 			return;
@@ -107,16 +106,16 @@ int main()//int argc, char** argv
 
 
 
-		yolov5vino.curr_ready = true;
-	});
+		yolov5vino.curr_ready = true; });//set_callback end 
 
-	yolov5vino.next_request.set_callback([&](std::exception_ptr ex) {
+    yolov5vino.next_request.set_callback([&](std::exception_ptr ex)
+                                         {
 		if (ex) {
 			exception_var = ex;
 			return;
 		}
 		
-                // output
+     // output
     ov::Tensor output = yolov5vino.next_request.get_output_tensor();
     ov::Shape outputDims = output.get_shape();
     size_t dimensions_num = output.get_shape()[2];
@@ -186,74 +185,64 @@ int main()//int argc, char** argv
             }
 
 
-		yolov5vino.next_ready = true;
-	});
-
-
-
+		yolov5vino.next_ready = true; });
 
     cv::VideoCapture cap(video_file);
-	int ih = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-	int iw = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    int ih = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    int iw = cap.get(cv::CAP_PROP_FRAME_WIDTH);
 
+    // do first frame
+    cap.read(yolov5vino.frame);
+    // cv::imwrite("/home/bigfly/Desktop/new/mnistcap2/data/img.jpg", yolov5vino.frame);
 
-	// do first frame
-	cap.read(yolov5vino.frame);
-    //cv::imwrite("/home/bigfly/Desktop/new/mnistcap2/data/img.jpg", yolov5vino.frame);
+    // cout<<yolov5vino.frame.cols<<yolov5vino.frame.rows<<endl;//1440x1080
+    yolov5vino.async_frame_detect(yolov5vino.frame, yolov5vino.request);
 
-    //cout<<yolov5vino.frame.cols<<yolov5vino.frame.rows<<endl;//1440x1080
-	yolov5vino.async_frame_detect(yolov5vino.frame,yolov5vino.request);
-
-	while (true) {
+    while (true)
+    {
         float val;
-		int64 start = cv::getTickCount();
+        int64 start = cv::getTickCount();
 
-		bool ret = cap.read(yolov5vino.next_frame);
-		if (yolov5vino.next_frame.empty()) {
-			break;
-		}
-		if (yolov5vino.curr_ready) {
-			yolov5vino.curr_ready = false;
-            val =yolov5vino.drawRect(yolov5vino.frame, yolov5vino.outputs);
-            cout<<"detecting result is: -"<<val<<endl;
-            //
-			float t = (cv::getTickCount() - start) / static_cast<float>(cv::getTickFrequency());
-			putText(yolov5vino.frame, cv::format("FPS: %.2f", 1.0 / t), cv::Point(1000, 80), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(255, 0, 0), 2, 8);//1440x1080
-			cv::imshow("OpenVINO2022", yolov5vino.frame);
-			yolov5vino.next_frame.copyTo(yolov5vino.frame);
-			yolov5vino.async_frame_detect(yolov5vino.frame, yolov5vino.next_request);
-		}
-		if (yolov5vino.next_ready) {
-			yolov5vino.next_ready = false;
+        bool ret = cap.read(yolov5vino.next_frame);
+        if (yolov5vino.next_frame.empty())
+        {
+            break;
+        }
+        if (yolov5vino.curr_ready)
+        {
+            yolov5vino.curr_ready = false;
             val = yolov5vino.drawRect(yolov5vino.frame, yolov5vino.outputs);
-            cout<<"detecting result is: -"<<val<<endl;
+            cout << "detecting result is: -" << val << endl;
             //
-			float t = (cv::getTickCount() - start) / static_cast<float>(cv::getTickFrequency());
-			putText(yolov5vino.frame, cv::format("FPS: %.2f", 1.0 / t), cv::Point(1000, 80), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(255, 0, 0), 2, 8);
-			cv::imshow("OpenVINO2022", yolov5vino.frame);
-			yolov5vino.next_frame.copyTo(yolov5vino.frame);
-			yolov5vino.async_frame_detect(yolov5vino.frame, yolov5vino.request);
-		}
-		
-		char c = cv::waitKey(1);
-		if (c == 27) { // ESC
-			break;
-		}
-	}
+            float t = (cv::getTickCount() - start) / static_cast<float>(cv::getTickFrequency());
+            putText(yolov5vino.frame, cv::format("FPS: %.2f", 1.0 / t), cv::Point(1000, 80), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(255, 0, 0), 2, 8); // 1440x1080
+            cv::imshow("OpenVINO2022", yolov5vino.frame);
+            yolov5vino.next_frame.copyTo(yolov5vino.frame);
+            yolov5vino.async_frame_detect(yolov5vino.frame, yolov5vino.next_request);
+        }
+        if (yolov5vino.next_ready)
+        {
+            yolov5vino.next_ready = false;
+            val = yolov5vino.drawRect(yolov5vino.frame, yolov5vino.outputs);
+            cout << "detecting result is: -" << val << endl;
+            //
+            float t = (cv::getTickCount() - start) / static_cast<float>(cv::getTickFrequency());
+            putText(yolov5vino.frame, cv::format("FPS: %.2f", 1.0 / t), cv::Point(1000, 80), cv::FONT_HERSHEY_PLAIN, 4, cv::Scalar(255, 0, 0), 2, 8);
+            cv::imshow("OpenVINO2022", yolov5vino.frame);
+            yolov5vino.next_frame.copyTo(yolov5vino.frame);
+            yolov5vino.async_frame_detect(yolov5vino.frame, yolov5vino.request);
+        }
 
+        char c = cv::waitKey(1);
+        if (c == 27)
+        { // ESC
+            break;
+        }
+    }
 
+    // std::vector<YOLOVINO::Detection> outputs;
 
-         //std::vector<YOLOVINO::Detection> outputs;
-    
-
-
-	cv::waitKey(0);
-	cv::destroyAllWindows();
-	return 0;
-
-
-
-
-
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+    return 0;
 }
-

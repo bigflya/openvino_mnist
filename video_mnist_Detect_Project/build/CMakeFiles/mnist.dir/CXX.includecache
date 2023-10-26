@@ -30,6 +30,16 @@ fstream
 iostream
 -
 
+/home/bigfly/Documents/openvino_mnist/video_mnist_Detect_Project/src/yolov5_openvino.cpp
+../include/yolov5_openvino.h
+/home/bigfly/Documents/openvino_mnist/video_mnist_Detect_Project/include/yolov5_openvino.h
+iostream
+-
+openvino/runtime/allocator.hpp
+-
+opencv2/core.hpp
+-
+
 /opt/intel/openvino_2022/runtime/include/ngraph/attribute_adapter.hpp
 string
 -
