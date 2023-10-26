@@ -5,11 +5,19 @@ openvino_mnist是一个关于openvino的一个推理项目，这里给出两套�
 
 
 
-## 快速使用教程
+## 快速上手:
 
-克隆此仓库到本地，建议先看[如何在Ubuntu上安装openvino runtime运行环境](https://bigflya.top/2023/06/03/openvino%20%E5%9C%A8ubuntu20%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/)，按照步骤完成相关环境的搭建。
-图片检测
+1. 克隆此仓库到本地，
+> 建议先看[如何在Ubuntu上安装openvino runtime运行环境](https://bigflya.top/2023/06/03/openvino%20%E5%9C%A8ubuntu20%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/)，按照步骤完成相关环境的搭建。
 
+2. 修改picture版本中main函数中的相关路径为自己工程目录所在路径。
+
+3. 删除掉build文件夹下的所有内容，并在build文件下打开终端依次执行 “ cmake .. ” 和 “ make”  ,最后执行“./mnist”即可在./save_data下生成检测结果图。
+
+
+
+
+> 若要对自己的模型进行加速，需要修改yolov5_openvino.cpp中部分内容。
 
 
 
