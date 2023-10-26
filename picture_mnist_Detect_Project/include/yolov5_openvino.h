@@ -52,7 +52,7 @@ private:
 
     
 #endif // NCS2
-	std::string m_modelFilename = "";
+	
     size_t m_numChannels = 0;
     size_t m_inputH = 0;
     size_t m_inputW = 0;
@@ -66,7 +66,7 @@ private:
 
 
 
-
+    std::string m_modelFilename = "";
     std::string m_classfile= "";
 
     vector<std::string> m_classNames;
